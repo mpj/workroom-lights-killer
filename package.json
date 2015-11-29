@@ -4,10 +4,10 @@
   "description": "",
   "main": "shell.js",
   "scripts": {
-    "test": "node test.js | tap-spec"
+    "test": "node src/test.js | tap-spec"
   },
   "bin": {
-    "kill-lights": "./cli.js"
+    "kill-lights": "./src/cli.js"
   },
   "repository": {
     "type": "git",
