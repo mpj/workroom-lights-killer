@@ -12,21 +12,11 @@ test('when no username, calls registerUser (button NOT pressed)', function(t) {
         .yields(new Error('Press button on bridge'))
   };
 
-  var services = {
-    hue: {
-      nupnpSearch: sinon.stub().yields(null,
-        [{"id":"001788ddde155085","ipaddress":fakeIP}]
-      ),
-      HueApi: sinon.stub().returns(apiStub)
-    },
-    fs: {
-      readFile: sinon.stub().withArgs('./username.tmp').yields(new Error('Could not read file')),
-      writeFile: sinon.spy()
-    },
-    console: {
-      log: sinon.stub()
-    }
-  }
+  var services = createServiceStubs()
+
+  services.hue.nupnpSearch.yields(null, [{"id":"001788ddde155085","ipaddress": fakeIP}])
+  services.hue.HueApi.returns(apiStub)
+  services.fs.readFile.withArgs('./username.tmp').yields(new Error('Could not read file'))
 
   core(services)
 
@@ -47,25 +37,17 @@ test('when no username, calls registerUser (button pressed)', function(t) {
         .yields(null, fakeGeneratedUsername)
   };
 
-  var services = {
-    hue: {
-      nupnpSearch: sinon.stub().yields(null,
-        [{"id":"001788ddde155085","ipaddress":fakeIP}]
-      ),
-      HueApi: sinon.stub().returns(apiStub)
-    },
-    fs: {
-      readFile: sinon.stub().withArgs('./username.tmp').yields(new Error('Could not read file')),
-      writeFile: sinon.spy()
-    },
-    console: {
-      log: sinon.stub()
-    }
-  }
+  var services = createServiceStubs()
+
+  services.hue.nupnpSearch.yields(null, [{"id":"001788ddde155085","ipaddress": fakeIP}])
+  services.hue.HueApi.returns(apiStub)
+  services.fs.readFile.withArgs('./username.tmp').yields(new Error('Could not read file'))
 
   core(services)
 
-  t.ok(services.fs.writeFile.calledWith('./username.tmp', fakeGeneratedUsername))
+  t.ok(
+    services.fs.writeFile.calledWith('./username.tmp', fakeGeneratedUsername),
+    'writes username to disk')
 
   t.end()
 
@@ -100,30 +82,24 @@ test('when username exists, turns off workroom bulb', function(t) {
     setLightState: sinon.spy()
   };
 
+
+  var services = createServiceStubs()
+
+  services.hue.nupnpSearch.yields(null, [{"id":"001788ddde155085","ipaddress": fakeIP}])
+  services.hue.HueApi
+    .withArgs(fakeIP, fakeGeneratedUsername)
+    .returns(apiStub)
+
+  services.fs.readFile
+    .withArgs('./username.tmp')
+    .yields(null, fakeGeneratedUsername)
+
   var offState = {}
-  var services = {
-    hue: {
-      nupnpSearch: sinon.stub().yields(null,
-        [{"id":"001788ddde155085","ipaddress":fakeIP}]
-      ),
-      HueApi: sinon.stub()
-        .withArgs(fakeIP, fakeGeneratedUsername)
-        .returns(apiStub),
-      lightState: {
-        create: function() {
-          return {
-            off: function() { return offState }
-          }
-        }
+  services.hue.lightState = {
+    create: function() {
+      return {
+        off: function() { return offState }
       }
-    },
-    fs: {
-      readFile: sinon.stub().withArgs('./username.tmp', 'utf8')
-        .yields(null, fakeGeneratedUsername),
-      writeFile: sinon.stub()
-    },
-    console: {
-      log: sinon.stub()
     }
   }
 
@@ -141,4 +117,18 @@ test('when username exists, turns off workroom bulb', function(t) {
 
 })
 
-test('when username exists')
+function createServiceStubs() {
+  return {
+    hue: {
+      nupnpSearch: sinon.stub(),
+      HueApi: sinon.stub()
+    },
+    fs: {
+      readFile: sinon.stub(),
+      writeFile: sinon.spy()
+    },
+    console: {
+      log: sinon.stub()
+    }
+  }
+}
