@@ -37,6 +37,10 @@ test('when no username, calls registerUser (button NOT pressed)', function(t) {
   core(services)
 
   t.ok(
+    apiStub.registerUser.calledWith(fakeIP, null, 'My nice node api thingee'),
+    'calls api correctly')
+
+  t.ok(
     services.console.log.calledWith('Not authenticated. Please press the button on your bridge and run this script again.'),
     'asks user to press button')
   t.end()
