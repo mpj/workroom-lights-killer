@@ -1,0 +1,27 @@
+{
+  "name": "workroom-lights-killer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "shell.js",
+  "scripts": {
+    "test": "node test.js | tap-spec"
+  },
+  "bin": {
+    "kill-workroom-bulb": "./cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mpj/workroom-lights-killer.git"
+  },
+  "author": "Mattias Petter Johansson <mpj@mpj.me>",
+  "license": "MIT",
+  "homepage": "https://github.com/mpj/workroom-lights-killer",
+  "dependencies": {
+    "node-hue-api": "^1.2.1"
+  },
+  "devDependencies": {
+    "sinon": "^1.17.2",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.2.2"
+  }
+}
