@@ -2,6 +2,22 @@ var test = require('tape')
 var sinon = require('sinon')
 var core = require('./core')
 
+function createServiceStubs() {
+  return {
+    hue: {
+      nupnpSearch: sinon.stub(),
+      HueApi: sinon.stub()
+    },
+    fs: {
+      readFile: sinon.stub(),
+      writeFile: sinon.spy()
+    },
+    console: {
+      log: sinon.stub()
+    }
+  }
+}
+
 test('when no username, calls registerUser (button NOT pressed)', function(t) {
 
   var fakeGeneratedUsername = '12345abcd'
@@ -116,19 +132,3 @@ test('when username exists, turns off workroom bulb', function(t) {
   t.end()
 
 })
-
-function createServiceStubs() {
-  return {
-    hue: {
-      nupnpSearch: sinon.stub(),
-      HueApi: sinon.stub()
-    },
-    fs: {
-      readFile: sinon.stub(),
-      writeFile: sinon.spy()
-    },
-    console: {
-      log: sinon.stub()
-    }
-  }
-}
