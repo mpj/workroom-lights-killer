@@ -1,6 +1,6 @@
 var test = require('tape')
-var core = require('./core')
 var sinon = require('sinon')
+var core = require('./core')
 
 test('when no username, calls registerUser (button NOT pressed)', function(t) {
 
