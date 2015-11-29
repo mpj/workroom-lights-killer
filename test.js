@@ -16,7 +16,7 @@ test('when no username, calls registerUser (button NOT pressed)', function(t) {
 
   services.hue.nupnpSearch.yields(null, [{"id":"001788ddde155085","ipaddress": fakeIP}])
   services.hue.HueApi.returns(apiStub)
-  services.fs.readFile.withArgs('./username.tmp').yields(new Error('Could not read file'))
+  services.fs.readFile.withArgs('/tmp/wlk-username.tmp').yields(new Error('Could not read file'))
 
   core(services)
 
@@ -41,12 +41,12 @@ test('when no username, calls registerUser (button pressed)', function(t) {
 
   services.hue.nupnpSearch.yields(null, [{"id":"001788ddde155085","ipaddress": fakeIP}])
   services.hue.HueApi.returns(apiStub)
-  services.fs.readFile.withArgs('./username.tmp').yields(new Error('Could not read file'))
+  services.fs.readFile.withArgs('/tmp/wlk-username.tmp').yields(new Error('Could not read file'))
 
   core(services)
 
   t.ok(
-    services.fs.writeFile.calledWith('./username.tmp', fakeGeneratedUsername),
+    services.fs.writeFile.calledWith('/tmp/wlk-username.tmp', fakeGeneratedUsername),
     'writes username to disk')
 
   t.end()
@@ -91,7 +91,7 @@ test('when username exists, turns off workroom bulb', function(t) {
     .returns(apiStub)
 
   services.fs.readFile
-    .withArgs('./username.tmp')
+    .withArgs('/tmp/wlk-username.tmp')
     .yields(null, fakeGeneratedUsername)
 
   var offState = {}

@@ -1,6 +1,6 @@
 module.exports = function core(services) {
   services.hue.nupnpSearch(function(error, result) {
-    services.fs.readFile('./username.tmp', function(error, username) {
+    services.fs.readFile('/tmp/wlk-username.tmp', function(error, username) {
       var api;
       if (error) {
         api = new services.hue.HueApi()
@@ -9,7 +9,7 @@ module.exports = function core(services) {
             if (error)
               services.console.log('Not authenticated. Please press the button on your bridge and run this script again.')
             else
-              services.fs.writeFile('./username.tmp', username)
+              services.fs.writeFile('/tmp/wlk-username.tmp', username)
           })
       } else {
         api = new services.hue.HueApi(result[0].ipaddress, username)
